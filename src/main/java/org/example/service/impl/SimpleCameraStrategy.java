@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import org.example.constants.CameraSystemConstants;
 import org.example.model.CaptureRequest;
 import org.example.model.CapturedImage;
 import org.example.service.CameraStrategy;
@@ -17,10 +18,10 @@ public class SimpleCameraStrategy implements CameraStrategy {
                 if (new Random().nextBoolean()) {
                     request.getSuccessCallback().accept(image);
                 } else {
-                    request.getFailureCallback().accept("Failed to capture image.");
+                    request.getFailureCallback().accept(CameraSystemConstants.ERROR_CAPTURE_FAILED);
                 }
             } catch (InterruptedException e) {
-                request.getFailureCallback().accept("Failed to capture image.");
+                request.getFailureCallback().accept(CameraSystemConstants.ERROR_CAPTURE_FAILED);
             }
         });
     }

@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.constants.CameraSystemConstants;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Consumer;
 
@@ -10,6 +12,9 @@ public class CaptureRequest {
     private final CountDownLatch latch;
 
     public CaptureRequest(int urgencyLevel, Consumer<CapturedImage> successCallback, Consumer<String> failureCallback) {
+        if (urgencyLevel < 0) {
+            throw new IllegalArgumentException(CameraSystemConstants.ERROR_INVALID_URGENCY);
+        }
         this.urgencyLevel = urgencyLevel;
         this.successCallback = successCallback;
         this.failureCallback = failureCallback;

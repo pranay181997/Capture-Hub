@@ -40,7 +40,6 @@ public class Main {
         cameraSystem.submitRequest("Client2", request4);
         cameraSystem.submitRequest("Client2", request5);
 
-        // Process requests and wait for results
         try {
             request1.waitForCompletion();
             request2.waitForCompletion();

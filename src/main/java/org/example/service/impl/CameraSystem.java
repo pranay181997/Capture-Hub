@@ -9,6 +9,9 @@ import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import static org.example.constants.CameraSystemConstants.DEFAULT_THREAD_POOL_SIZE;
 
 public class CameraSystem {
     private final CameraStrategy cameraStrategy;
@@ -18,7 +21,7 @@ public class CameraSystem {
     public CameraSystem(CameraStrategy cameraStrategy) {
         this.cameraStrategy = cameraStrategy;
         this.clientQueues =  new ConcurrentHashMap<>();
-        this.executorService = Executors.newFixedThreadPool(4);
+        this.executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
         startProcessingCommands();
     }
 
@@ -51,6 +54,14 @@ public class CameraSystem {
 
     public void shutdown() {
         executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException ex) {
+            executorService.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 }
 
